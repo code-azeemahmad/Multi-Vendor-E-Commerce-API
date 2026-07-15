@@ -10,6 +10,8 @@ from app.exceptions import (
     InvalidCredentialsError,
     InvalidTokenError,
     PermissionDeniedError,
+    PasswordReuseError,
+    InvalidCurrentPasswordError,
 )
 
 from .auth import (
@@ -20,6 +22,8 @@ from .auth import (
     invalid_credentials_handler,
     invalid_token_handler,
     permission_denied_handler,
+    password_reuse_handler,
+    invalid_current_password_handler,   
 )
 
 
@@ -59,6 +63,16 @@ def register_exception_handlers(app: FastAPI) -> None:
     )
     
     app.add_exception_handler(
-        PermissionDeniedError,
+        PermissionDeniedError,  
         permission_denied_handler
+    )
+    
+    app.add_exception_handler(
+        PasswordReuseError,
+        password_reuse_handler
+    )
+    
+    app.add_exception_handler(
+        InvalidCurrentPasswordError,
+        invalid_current_password_handler
     )

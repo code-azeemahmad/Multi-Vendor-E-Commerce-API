@@ -11,7 +11,7 @@ from app.exceptions import (
     InvalidCredentialsError,
     InvalidTokenError,
 )
-from app.exceptions.auth import PermissionDeniedError
+from app.exceptions.auth import InvalidCurrentPasswordError, PasswordReuseError, PermissionDeniedError
 
 
 async def email_already_exists_handler(
@@ -94,5 +94,29 @@ async def permission_denied_handler(
         status_code=403,
         content={
             "detail": "You do not have permission to perform this action."
+        },
+    )
+    
+    
+async def invalid_current_password_handler(
+    request: Request,
+    exc: InvalidCurrentPasswordError,
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        content={
+            "detail": "Current password is incorrect.",
+        },
+    )
+
+
+async def password_reuse_handler(
+    request: Request,
+    exc: PasswordReuseError,
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={
+            "detail": "New password must be different from the current password.",
         },
     )

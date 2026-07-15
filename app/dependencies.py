@@ -1,3 +1,4 @@
+# app/dependencies.py
 from functools import lru_cache
 from typing import Annotated
 
@@ -7,7 +8,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.jwt import JWTService
 from app.core.security import PasswordHasher
 from app.database.database import get_db
-from app.exceptions.auth import AuthenticationRequiredError, InactiveUserError, UserNotFoundError
+from app.exceptions.auth import (
+    AuthenticationRequiredError,
+    InactiveUserError,
+    UserNotFoundError,
+)
 from app.models.user import User
 from app.repositories.auth_repository import AuthRepository
 from app.services.auth import AuthService
@@ -27,6 +32,7 @@ from app.services.user_service import UserService
 security = HTTPBearer(
     auto_error=False,
 )
+
 
 @lru_cache
 def get_password_hasher() -> PasswordHasher:
@@ -143,5 +149,12 @@ def get_user_service(
         UserRepository,
         Depends(get_user_repository),
     ],
+    password_hasher: Annotated[
+        PasswordHasher,
+        Depends(get_password_hasher),
+    ],
 ) -> UserService:
-    return UserService(repository)
+    return UserService(
+        repository=repository,
+        password_hasher=password_hasher,
+    )

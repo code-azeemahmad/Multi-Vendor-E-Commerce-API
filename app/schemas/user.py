@@ -45,3 +45,19 @@ class UpdateProfileRequest(BaseModel):
         default=None,
         max_length=30,
     )
+    
+    
+class ChangePasswordRequest(BaseModel):
+    """
+    Request model for changing the authenticated user's password.
+    """
+
+    current_password: str = Field(
+        min_length=8,
+        max_length=128,
+    )
+
+    new_password: str = Field(
+        min_length=8,
+        max_length=128,
+    )

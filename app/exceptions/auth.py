@@ -41,7 +41,7 @@ class InactiveUserError(AuthException):
     """
     Raised when a user account has been disabled.
     """
-    
+
 
 # app/exceptions/user.py
 
@@ -56,15 +56,26 @@ class UserNotFoundError(UserException):
     """
     Raised when a user cannot be found.
     """
-    
+
 
 class AuthenticationRequiredError(AuthException):
     """
     Raised when authentication credentials are missing.
     """
-    
+
 
 class PermissionDeniedError(AuthException):
     """
     Raised when the authenticated user lacks the required permissions.
+    """
+
+class InvalidCurrentPasswordError(AuthException):
+    """
+    Raised when the current password is incorrect.
+    """
+
+
+class PasswordReuseError(AuthException):
+    """
+    Raised when the new password matches the current password.
     """

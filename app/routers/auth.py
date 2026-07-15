@@ -1,15 +1,18 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Response, status
 
-from app.dependencies import get_auth_service
+from app.dependencies import get_auth_service, get_current_user, get_user_service
+from app.models.user import User
 from app.schemas.auth import (
     AuthResponse,
     LoginRequest,
     RefreshTokenRequest,
     RegisterRequest,
 )
+from app.schemas.user import ChangePasswordRequest
 from app.services.auth import AuthService
+from app.services.user_service import UserService
 
 router = APIRouter(
     prefix="/auth",
@@ -67,4 +70,30 @@ async def refresh(
 ) -> AuthResponse:
     return await service.refresh_tokens(
         data.refresh_token,
+    )
+
+
+@router.patch(
+    "/password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Change password",
+)
+async def change_password(
+    data: ChangePasswordRequest,
+    current_user: Annotated[
+        User,
+        Depends(get_current_user),
+    ],
+    service: Annotated[
+        UserService,
+        Depends(get_user_service),
+    ],
+) -> Response:
+    await service.change_password(
+        current_user=current_user,
+        data=data,
+    )
+
+    return Response(
+        status_code=status.HTTP_204_NO_CONTENT,
     )
