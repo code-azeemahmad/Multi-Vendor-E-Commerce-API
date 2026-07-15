@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     APP_NAME: str
     APP_VERSION: str
 
+    SECRET_KEY: str
+    ALGORITHM: str = "HS256"
+
     DEBUG: bool = False
 
     HOST: str = "127.0.0.1"
