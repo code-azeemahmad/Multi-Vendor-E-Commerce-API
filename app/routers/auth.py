@@ -2,11 +2,13 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, status
 
-from app.dependencies import get_auth_service
+from app.dependencies import get_auth_service, get_current_user
+from app.models.user import User
 from app.schemas.auth import (
     AuthResponse,
     LoginRequest,
     RegisterRequest,
+    UserResponse,
 )
 from app.services.auth import AuthService
 
@@ -50,3 +52,21 @@ async def login(
     Authenticate a user and return JWT tokens.
     """
     return await service.login(data)
+
+
+@router.get(
+    "/me",
+    response_model=UserResponse,
+    summary="Current authenticated user",
+)
+async def me(
+    current_user: Annotated[
+        User,
+        Depends(get_current_user),
+    ],
+) -> UserResponse:
+    """
+    Return the currently authenticated user.
+    """
+
+    return UserResponse.model_validate(current_user)

@@ -64,17 +64,6 @@ class AuthService:
         Authenticate a user and return JWT tokens.
         """
         user = await self.repository.get_by_email(data.email)
-        
-        print("Email:", data.email)
-        print("Password:", repr(data.password))
-        print("Hash:", user.hashed_password)
-        
-        valid = self.password_hasher.verify(
-            data.password,
-            user.hashed_password,
-        )
-        
-        print("Password Valid:", valid)
 
         if user is None:
             raise InvalidCredentialsError()

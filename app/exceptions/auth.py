@@ -41,3 +41,24 @@ class InactiveUserError(AuthException):
     """
     Raised when a user account has been disabled.
     """
+    
+
+# app/exceptions/user.py
+
+
+class UserException(Exception):
+    """
+    Base exception for user-related errors.
+    """
+
+
+class UserNotFoundError(UserException):
+    """
+    Raised when a user cannot be found.
+    """
+    
+
+class AuthenticationRequiredError(AuthException):
+    """
+    Raised when authentication credentials are missing.
+    """

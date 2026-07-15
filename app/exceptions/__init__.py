@@ -6,6 +6,9 @@ from .auth import (
     ExpiredTokenError,
     EmailNotVerifiedError,
     InactiveUserError,
+    UserException,
+    UserNotFoundError,
+    AuthenticationRequiredError,
 )
 
 __all__ = [
@@ -16,4 +19,7 @@ __all__ = [
     "ExpiredTokenError",
     "EmailNotVerifiedError",
     "InactiveUserError",
+    "UserException",
+    "UserNotFoundError",
+    "AuthenticationRequiredError"
 ]
