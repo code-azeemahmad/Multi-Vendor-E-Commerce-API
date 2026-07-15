@@ -6,6 +6,7 @@ from app.exceptions import (
     EmailAlreadyExistsError,
     InvalidCredentialsError,
 )
+from app.exceptions.auth import InactiveUserError, UserNotFoundError
 from app.models.enums import UserRole
 from app.models.user import User
 from app.repositories.auth_repository import AuthRepository
@@ -123,6 +124,30 @@ class AuthService:
             tokens=self._generate_tokens(user),
         )
         
+        
+    async def refresh_tokens(
+        self,
+        refresh_token: str,
+    ) -> AuthResponse:
+        """
+        Refresh a user's JWT tokens.
+        """
+    
+        payload = self.jwt_service.verify_refresh_token(
+            refresh_token,
+        )
+    
+        user = await self.repository.get_by_id(
+            payload.sub,
+        )
+    
+        if user is None:
+            raise UserNotFoundError()
+    
+        if not user.is_active:
+            raise InactiveUserError()
+    
+        return self._build_auth_response(user)
 
 '''
                  AuthService

@@ -36,3 +36,11 @@ class TokenResponse(BaseModel):
 class AuthResponse(BaseModel):
     user: UserResponse
     tokens: TokenResponse
+    
+    
+class RefreshTokenRequest(BaseModel):
+    """
+    Request body for refreshing JWT tokens.
+    """
+
+    refresh_token: str

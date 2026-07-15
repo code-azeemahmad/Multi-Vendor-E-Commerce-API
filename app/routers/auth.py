@@ -6,6 +6,7 @@ from app.dependencies import get_auth_service
 from app.schemas.auth import (
     AuthResponse,
     LoginRequest,
+    RefreshTokenRequest,
     RegisterRequest,
 )
 from app.services.auth import AuthService
@@ -50,3 +51,20 @@ async def login(
     Authenticate a user and return JWT tokens.
     """
     return await service.login(data)
+
+
+@router.post(
+    "/refresh",
+    response_model=AuthResponse,
+    summary="Refresh JWT tokens",
+)
+async def refresh(
+    data: RefreshTokenRequest,
+    service: Annotated[
+        AuthService,
+        Depends(get_auth_service),
+    ],
+) -> AuthResponse:
+    return await service.refresh_tokens(
+        data.refresh_token,
+    )
