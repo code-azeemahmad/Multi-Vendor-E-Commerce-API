@@ -11,6 +11,7 @@ from app.exceptions import (
     InvalidCredentialsError,
     InvalidTokenError,
 )
+from app.exceptions.auth import PermissionDeniedError
 
 
 async def email_already_exists_handler(
@@ -81,5 +82,17 @@ async def inactive_user_handler(
         status_code=status.HTTP_403_FORBIDDEN,
         content={
             "detail": "User account is inactive.",
+        },
+    )
+    
+    
+async def permission_denied_handler(
+    request: Request,
+    exc: PermissionDeniedError,
+):
+    return JSONResponse(
+        status_code=403,
+        content={
+            "detail": "You do not have permission to perform this action."
         },
     )

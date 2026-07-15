@@ -9,6 +9,7 @@ from .auth import (
     UserException,
     UserNotFoundError,
     AuthenticationRequiredError,
+    PermissionDeniedError,
 )
 
 __all__ = [
@@ -21,5 +22,6 @@ __all__ = [
     "InactiveUserError",
     "UserException",
     "UserNotFoundError",
-    "AuthenticationRequiredError"
+    "AuthenticationRequiredError",
+    "PermissionDeniedError",
 ]

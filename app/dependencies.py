@@ -14,6 +14,13 @@ from app.services.auth import AuthService
 
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
+from collections.abc import Callable
+
+from app.exceptions import (
+    PermissionDeniedError,
+)
+from app.models.enums import UserRole
+
 security = HTTPBearer(
     auto_error=False,
 )
@@ -89,3 +96,31 @@ async def get_current_user(
         raise InactiveUserError()
 
     return user
+
+
+def require_roles(
+    *roles: UserRole,
+) -> Callable:
+    """
+    Create a dependency that requires one of the given roles.
+    """
+
+    async def dependency(
+        current_user: Annotated[
+            User,
+            Depends(get_current_user),
+        ],
+    ) -> User:
+        if current_user.role not in roles:
+            raise PermissionDeniedError()
+
+        return current_user
+
+    return dependency
+
+
+require_admin = require_roles(UserRole.ADMIN)
+
+require_vendor = require_roles(UserRole.VENDOR)
+
+require_customer = require_roles(UserRole.CUSTOMER)

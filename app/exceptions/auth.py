@@ -62,3 +62,9 @@ class AuthenticationRequiredError(AuthException):
     """
     Raised when authentication credentials are missing.
     """
+    
+
+class PermissionDeniedError(AuthException):
+    """
+    Raised when the authenticated user lacks the required permissions.
+    """
