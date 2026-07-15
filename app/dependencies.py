@@ -21,6 +21,9 @@ from app.exceptions import (
 )
 from app.models.enums import UserRole
 
+from app.repositories.user_repository import UserRepository
+from app.services.user_service import UserService
+
 security = HTTPBearer(
     auto_error=False,
 )
@@ -124,3 +127,21 @@ require_admin = require_roles(UserRole.ADMIN)
 require_vendor = require_roles(UserRole.VENDOR)
 
 require_customer = require_roles(UserRole.CUSTOMER)
+
+
+def get_user_repository(
+    db: Annotated[
+        AsyncSession,
+        Depends(get_db),
+    ],
+) -> UserRepository:
+    return UserRepository(db)
+
+
+def get_user_service(
+    repository: Annotated[
+        UserRepository,
+        Depends(get_user_repository),
+    ],
+) -> UserService:
+    return UserService(repository)

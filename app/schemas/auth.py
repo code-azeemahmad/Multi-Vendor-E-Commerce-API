@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from uuid import UUID
+from pydantic import BaseModel, EmailStr, Field
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from app.models.enums import UserRole
+
+from app.schemas.user import UserResponse
 
 
 class RegisterRequest(BaseModel):
@@ -26,20 +26,6 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
-
-
-class UserResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: UUID
-    email: EmailStr
-    full_name: str
-    phone: str | None
-    profile_image_url: str | None
-    role: UserRole
-    is_verified: bool
-    is_active: bool
-
 
 class TokenResponse(BaseModel):
     access_token: str
