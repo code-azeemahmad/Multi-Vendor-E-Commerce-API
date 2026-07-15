@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from datetime import datetime
 from app.core.config import settings
-from fastapi import APIRouter, Depends
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database.database import get_db
 from sqlalchemy import text
